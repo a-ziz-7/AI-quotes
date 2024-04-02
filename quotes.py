@@ -67,11 +67,11 @@ def write_text_on_image(image_path, text, output_path):
     print(image_path)
     image = Image.open(image_path)
     draw = ImageDraw.Draw(image)
-    font_size = 80
+    font_size = 85
     font = ImageFont.load_default()
     font = font.font_variant(size=font_size)
     draw.text((100, 1400), text, fill="white", font=font)
-    output_path += "/quote_"+image_path.split("_")[-1]
+    output_path += "/123.jpg" # "/quote_"+image_path.split("_")[-1]
     image.save(output_path)
 
 
@@ -81,7 +81,7 @@ def main():
     output_path = "quotes"
     print("Random Image URL:", random_image)
     print("Image saved to:", image_filename)
-    write_text_on_image(image_filename, "123123123211231231231\n23123123", output_path)
+    write_text_on_image(image_filename, "123123123211231231\n23123123123", output_path)
     
 
 if __name__ == "__main__":
