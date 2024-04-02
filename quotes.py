@@ -9,7 +9,6 @@ from PIL import Image, ImageDraw, ImageFont
 palm.configure(api_key=keys.api_key_ai)
 
 
-
 model_id = "models/text-bison-001"
 prompt = "Generate 1 sentence - unique philosophical quote."
 
@@ -29,19 +28,34 @@ def generate_text(prompt):
     
 
 def chopchop(sentence):
-    pass
+    answer = ""
+    state = False
+    for i in range(len(sentence)):
+        if sentence[i] == "\"":
+            state = not state
+            continue
+        if state:
+            answer += sentence[i]
+    splited = answer.split(" ")
+    max_len = 32
+    ret1 = ""
+    ret2 = ""
+    state = True
+    for i in splited:
+        if state:
+            if len(ret1) + len(i) + 1 <= max_len:
+                ret1 += i + " "
+            else:
+                ret1 += "\n"
+                ret2 += i + " "
+                state = False
+        else:
+            ret2 += i + " "
+    # print(ret1+ret2)
+    return (max_len-len(ret1))*" "+ret1+(max_len-len(ret2))*" "+ret2
 
-
-if False:
-    completion = generate_text(prompt)
-
-    candidates = [i['output'] for i in completion.candidates]
-    for i in candidates:
-        print(i)
-
-
-def get_random_image():
-    url = f'https://api.unsplash.com/photos/random/?client_id={keys.api_key_unsplash}'
+def get_random_image(width=1080, height=1624):
+    url = f'https://api.unsplash.com/photos/random/?client_id={keys.api_key_unsplash}&w={width}&h={height}'
     response = requests.get(url)
     
     if response.status_code == 200:
@@ -64,24 +78,29 @@ def download_image(image_url, folder='images'):
 
 
 def write_text_on_image(image_path, text, output_path):
-    print(image_path)
+    # print(image_path)
     image = Image.open(image_path)
     draw = ImageDraw.Draw(image)
-    font_size = 85
+    font_size = 75
     font = ImageFont.load_default()
     font = font.font_variant(size=font_size)
-    draw.text((100, 1400), text, fill="white", font=font)
-    output_path += "/123.jpg" # "/quote_"+image_path.split("_")[-1]
+    draw.text((30, 1350), text, fill="white", font=font)
+    output_path += "/quote_"+image_path.split("_")[-1]
     image.save(output_path)
 
 
 def main():
-    random_image = get_random_image()
-    image_filename = download_image(random_image)
     output_path = "quotes"
-    print("Random Image URL:", random_image)
-    print("Image saved to:", image_filename)
-    write_text_on_image(image_filename, "123123123211231231\n23123123123", output_path)
+
+    completion = generate_text(prompt)
+
+    candidates = [i['output'] for i in completion.candidates]
+    for i in candidates:
+        random_image = get_random_image()
+        image_filename = download_image(random_image)
+        print(chopchop(i))
+        # "123123123211231231\n23123123123",
+        write_text_on_image(image_filename, chopchop(i), output_path)
     
 
 if __name__ == "__main__":
