@@ -10,27 +10,40 @@ palm.configure(api_key=api_key)
 
 # Text
 model_id = "models/text-bison-001"
-prompt = "Generate meme joke related to sports" # input("Enter your prompt: ")
-
+# prompt = "Generate 1 sentence meme joke related to mountains. Without a question" 
+prompt = "Generate 1 sentence - unique philosophical quote."
+example = [("prompt","responce")]
 
 def generate_text(prompt):
     completion = palm.generate_text(
+        # max_output_tokens=1000,
         model=model_id, 
         prompt=prompt,
-        temperature=0.99,
-        # max_output_tokens=1000,
-        candidate_count=1
+        temperature=0.7,
+        candidate_count=8,
     )
     if len(completion.candidates) == 0:
         return "Cannot generate text."
     else:
-        return completion.candidates
+        return completion
     
 
+def chopchop(sentence):
+    pass
+
+
 os.system('clear')
-# chatbot
+# chatboе
 # while prompt != "exit":
 #     prompt = input("Enter your prompt: ")
 completion = generate_text(prompt)
-candidates = [i['output'] for i in completion] # [0]
-print(candidates)
+# completion.reply("promt")
+
+# one case
+# candidates = [i['output'] for i in completion.candidates][0]
+# print(candidates)
+
+# many case
+candidates = [i['output'] for i in completion.candidates]
+for i in candidates:
+    print(i)
