@@ -3,6 +3,7 @@ import keys
 import requests
 import random
 import os
+from PIL import Image, ImageDraw, ImageFont
 
 
 palm.configure(api_key=keys.api_key_ai)
@@ -61,10 +62,27 @@ def download_image(image_url, folder='images'):
         f.write(response.content)
     return filename
 
+
+def write_text_on_image(image_path, text, output_path):
+    print(image_path)
+    image = Image.open(image_path)
+    draw = ImageDraw.Draw(image)
+    font_size = 80
+    font = ImageFont.load_default()
+    font = font.font_variant(size=font_size)
+    draw.text((100, 1500), text, fill="white", font=font)
+    output_path += "/quote_"+image_path.split("_")[-1]
+    image.save(output_path)
+
+
 def main():
     random_image = get_random_image()
     image_filename = download_image(random_image)
+    output_path = "quotes"
     print("Random Image URL:", random_image)
+    print("Image saved to:", image_filename)
+    write_text_on_image(image_filename, "12312312321123123123123123123", output_path)
+    
 
 if __name__ == "__main__":
     main()
