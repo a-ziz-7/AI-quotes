@@ -3,6 +3,7 @@ import keys
 import requests
 import random
 import os
+from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 
 
@@ -10,7 +11,7 @@ palm.configure(api_key=keys.api_key_ai)
 
 
 model_id = "models/text-bison-001"
-prompt = "Generate 1 sentence - unique philosophical quote."
+prompt = "Generate 1 sentence - unique motivatonal quote"
 
 
 def generate_text(prompt):
@@ -54,7 +55,8 @@ def chopchop(sentence):
     # print(ret1+ret2)
     return (max_len-len(ret1))*" "+ret1+(max_len-len(ret2))*" "+ret2
 
-def get_random_image(width=1080, height=1624):
+
+def get_random_image(width=1080, height=1920):
     url = f'https://api.unsplash.com/photos/random/?client_id={keys.api_key_unsplash}&w={width}&h={height}'
     response = requests.get(url)
     
@@ -66,6 +68,7 @@ def get_random_image(width=1080, height=1624):
         print(f"Failed to fetch image. Error: {response.status_code}")
         return None
     
+
 def download_image(image_url, folder='images'):
     if not os.path.exists(folder):
         os.makedirs(folder)
@@ -99,7 +102,6 @@ def main():
         random_image = get_random_image()
         image_filename = download_image(random_image)
         print(chopchop(i))
-        # "123123123211231231\n23123123123",
         write_text_on_image(image_filename, chopchop(i), output_path)
     
 
