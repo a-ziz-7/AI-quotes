@@ -11,7 +11,7 @@ palm.configure(api_key=keys.api_key_ai)
 
 
 model_id = "models/text-bison-001"
-prompt = "Generate 1 short sentence - unique motivatonal quote"
+prompt = "Generate 1 short sentence - unique philosophical motivatonal quote"
 
 
 def generate_text(prompt):
@@ -59,7 +59,7 @@ def chopchop(sentence):
     punctuation = ["!", "?", ";", ":", "*"]
     for i in punctuation:
         ret = ret.replace(i, "")
-    ret = ret[:-1]
+    ret = ret[:-2]
     return ret
 
 
@@ -100,7 +100,7 @@ def write_text_on_image(image_path, text, output_path):
         font_size = 85
         font = ImageFont.load_default()
         font = font.font_variant(size=font_size)
-        draw.text((40, 2000), text, fill="white", font=font)
+        draw.text((30, 2000), text, fill="white", font=font)
         output_path += "/quote_"+image_path.split("_")[-1]
         image.save(output_path)
     except:
