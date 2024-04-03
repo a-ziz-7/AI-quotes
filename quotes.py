@@ -20,7 +20,7 @@ def generate_text(prompt):
         model=model_id, 
         prompt=prompt,
         temperature=0.7,
-        candidate_count=2,
+        candidate_count=4,
     )
     if len(completion.candidates) == 0:
         return "Cannot generate text."
@@ -40,7 +40,7 @@ def chopchop(sentence):
     if answer == "":
         answer = sentence
     splited = answer.split(" ")
-    max_len = 41
+    max_len = 35
     ret1 = ""
     ret2 = ""
     state = True
@@ -55,7 +55,8 @@ def chopchop(sentence):
         else:
             ret2 += i + " "
     # print(ret1+ret2)
-    ret = int((max_len-len(ret1[:-2])))*" "+ret1+int((max_len-len(ret2)))*" "+ret2
+    # ret = int((max_len-len(ret1[:-2])+5)/2)*"_"+ret1+int((max_len-len(ret2[:-2])+5)/2)*"_"+ret2
+    ret = ret1 + ret2
     punctuation = ["!", "?", ";", ":", "*"]
     for i in punctuation:
         ret = ret.replace(i, "")
@@ -94,28 +95,30 @@ def download_image(image_url, output_path="my_images/", width=1704, height=2272)
 
 
 def write_text_on_image(image_path, text, output_path):
-    try:
-        image = Image.open(image_path)
-        draw = ImageDraw.Draw(image)
-        font_size = 85
-        font = ImageFont.load_default()
-        font = font.font_variant(size=font_size)
-        
-        text_width, text_height = draw.textsize(text, font=font)
-        image_width, image_height = image.size
-        
-        # Calculate position to center the text horizontally
-        x_position = (image_width - text_width) // 2
+    # try:
+    width = 1704
+    image = Image.open(image_path)
+    draw = ImageDraw.Draw(image)
+    font_size = 100
 
-        draw.text((70, 2000), text, fill="white", font=font)
-        output_path += "/quote_"+image_path.split("_")[-1]
-        image.save(output_path)
-    except:
-        print("Failed to write text on image.")
+    # font = ImageFont.load_default()
+    font = ImageFont.truetype("AmericanCaptain-MdEY.otf", size=font_size)
+    # font = font.font_variant(size=font_size)
+    text_long_split = text.split("\n")
+    text_long = text_long_split[0] if len(text_long_split[0]) >= len(text_long_split[1]) else text_long_split[1]
+    font_width, font_height = font.font.getsize(text_long)
+    font_width = font_width[0]
+    new_width = (width - font_width) // 2
+
+    draw.text((new_width, 2000), text, fill="black", font=font, spacing=20, align="center")
+    output_path += "/quote_"+image_path.split("_")[-1]
+    image.save(output_path)
+    # except:
+    #     print("Failed to write text on image.")
 
 
 def main():
-    output_path = "my_quotes"
+    output_path = "new_quotes"
 
     completion = generate_text(prompt)
 
@@ -123,8 +126,8 @@ def main():
     for i in candidates:
         random_image = get_random_image()
         image_filename = download_image(random_image)
-        print(chopchop(i))
         write_text_on_image(image_filename, chopchop(i), output_path)
+    # write_text_on_image(image_filename, "012345678901234567890123456789012345678901234567890123456789", output_path)
     
 
 if __name__ == "__main__":
