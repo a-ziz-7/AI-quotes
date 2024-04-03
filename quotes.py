@@ -20,7 +20,7 @@ def generate_text(prompt):
         model=model_id, 
         prompt=prompt,
         temperature=0.7,
-        candidate_count=4,
+        candidate_count=8,
     )
     if len(completion.candidates) == 0:
         return "Cannot generate text."
@@ -95,26 +95,26 @@ def download_image(image_url, output_path="my_images/", width=1704, height=2272)
 
 
 def write_text_on_image(image_path, text, output_path):
-    # try:
-    width = 1704
-    image = Image.open(image_path)
-    draw = ImageDraw.Draw(image)
-    font_size = 100
+    try:
+        width = 1704
+        image = Image.open(image_path)
+        draw = ImageDraw.Draw(image)
+        font_size = 110
 
-    # font = ImageFont.load_default()
-    font = ImageFont.truetype("AmericanCaptain-MdEY.otf", size=font_size)
-    # font = font.font_variant(size=font_size)
-    text_long_split = text.split("\n")
-    text_long = text_long_split[0] if len(text_long_split[0]) >= len(text_long_split[1]) else text_long_split[1]
-    font_width, font_height = font.font.getsize(text_long)
-    font_width = font_width[0]
-    new_width = (width - font_width) // 2
+        # font = ImageFont.load_default()
+        font = ImageFont.truetype("AmericanCaptain-MdEY.otf", size=font_size)
+        # font = font.font_variant(size=font_size)
+        text_split = text.split("\n")
+        text_long = text_split[0] if len(text_split[0]) >= len(text_split[1]) else text_split[1]
+        font_width, font_height = font.font.getsize(text_long)
+        font_width = font_width[0]
+        new_width = (width - font_width) // 2
 
-    draw.text((new_width, 2000), text, fill="black", font=font, spacing=20, align="center")
-    output_path += "/quote_"+image_path.split("_")[-1]
-    image.save(output_path)
-    # except:
-    #     print("Failed to write text on image.")
+        draw.text((new_width, 2000), text, fill="white", font=font, spacing=20, align="center")
+        output_path += "/quote_"+image_path.split("_")[-1]
+        image.save(output_path)
+    except:
+        print("Failed to write text on image.")
 
 
 def main():
