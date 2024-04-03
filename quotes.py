@@ -40,7 +40,7 @@ def chopchop(sentence):
     if answer == "":
         answer = sentence
     splited = answer.split(" ")
-    max_len = 46
+    max_len = 44
     ret1 = ""
     ret2 = ""
     state = True
@@ -55,7 +55,7 @@ def chopchop(sentence):
         else:
             ret2 += i + " "
     # print(ret1+ret2)
-    ret = (max_len-len(ret1))*" "+ret1+(max_len-len(ret2))*" "+ret2
+    ret = (max_len-len(ret1))*" "+ret1+(max_len-len(ret2)+2)*" "+ret2
     punctuation = ["!", "?", ";", ":", "*"]
     for i in punctuation:
         ret = ret.replace(i, "")
