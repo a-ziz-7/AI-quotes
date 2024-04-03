@@ -101,7 +101,7 @@ def write_text_on_image(num, run, image_path, text, output_path):
         new_width = (width - font_width) // 2
         draw.text((new_width, 2000), text, fill="white", font=font, spacing=30, align="center")
         output_path1 = f"{output_path}quote_{num}{run}{color}.jpg"
-        # image.save(output_path1)
+        image.save(output_path1)
         # 2nd color
         image = Image.open(image_path)
         draw = ImageDraw.Draw(image)
