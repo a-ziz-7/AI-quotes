@@ -7,20 +7,8 @@ from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 
 
-
-'''
-    Generate both white and black text on image
-    Change the name generation of the images, can repeat themselves since they are in different folders
-'''
-
-palm.configure(api_key=keys.api_key_ai)
-
-
-model_id = "models/text-bison-001"
-prompt = "Generate 1 short sentence - unique philosophical motivatonal quote"
-
-
 def generate_text(prompt):
+    model_id = "models/text-bison-001"
     completion = palm.generate_text(
         # max_output_tokens=1000,
         model=model_id, 
@@ -98,30 +86,39 @@ def download_image(image_url, output_path="my_images/", width=1704, height=2272)
         return None
 
 
-def write_text_on_image(image_path, text, output_path):
+def write_text_on_image(num, run, image_path, text, output_path):
     try:
         width = 1704
         image = Image.open(image_path)
         draw = ImageDraw.Draw(image)
         font_size = 110
-
-        # font = ImageFont.load_default()
+        color = 1
         font = ImageFont.truetype("AmericanCaptain-MdEY.otf", size=font_size)
-        # font = font.font_variant(size=font_size)
         text_split = text.split("\n")
         text_long = text_split[0] if len(text_split)==1 else text_split[0] if len(text_split[0]) >= len(text_split[1]) else text_split[1]
         font_width, font_height = font.font.getsize(text_long)
         font_width = font_width[0]
         new_width = (width - font_width) // 2
-
-        draw.text((new_width, 2000), text, fill="white", font=font, spacing=20, align="center")
-        output_path += "quote_"+image_path.split("_")[-1]
-        image.save(output_path)
+        draw.text((new_width, 2000), text, fill="white", font=font, spacing=30, align="center")
+        output_path1 = f"{output_path}quote_{num}{run}{color}.jpg"
+        image.save(output_path1)
+        # 2nd color
+        # image = Image.open(image_path)
+        # draw = ImageDraw.Draw(image)
+        # font = ImageFont.truetype("AmericanCaptain-MdEY.otf", size=font_size)
+        # draw.text((new_width, 2000), text, fill="black", font=font, spacing=30, align="center")
+        # color += 1
+        # output_path2 = f"{output_path}quote_{num}{run}{color}.jpg"
+        # image.save(output_path2)
     except:
         print("Failed to write text on image.")
 
 
 def main():
+    palm.configure(api_key=keys.api_key_ai)
+
+    prompt = "Generate 1 short sentence - unique philosophical motivatonal quote"
+
     f = open("all_quotes/number.txt", "r")
     num = int(f.read())
     path = f"all_quotes/quotes_{num}/"
@@ -133,11 +130,11 @@ def main():
     completion = generate_text(prompt)
 
     candidates = [i['output'] for i in completion.candidates]
-    for i in candidates:
-        for _ in range(num_images):
+    for i in range(len(candidates)):
+        for j in range(num_images):
             random_image = get_random_image()
             image_filename = download_image(random_image)
-            write_text_on_image(image_filename, chopchop(i), output_path)
+            write_text_on_image(i+1, j+1, image_filename, chopchop(candidates[i]), output_path)
     
     w = open("all_quotes/number.txt", "w")  
     w.write(str(num+1))  
