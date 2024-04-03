@@ -7,6 +7,12 @@ from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 
 
+
+'''
+    Generate both white and black text on image
+    Change the name generation of the images, can repeat themselves since they are in different folders
+'''
+
 palm.configure(api_key=keys.api_key_ai)
 
 
@@ -33,14 +39,14 @@ def chopchop(sentence):
     state = False
     for i in range(len(sentence)):
         if sentence[i] == "\"":
-            state = not state
+            state = not state # !state 
             continue
         if state:
             answer += sentence[i]
     if answer == "":
         answer = sentence
     splited = answer.split(" ")
-    max_len = 35
+    max_len = 40 # might need to change
     ret1 = ""
     ret2 = ""
     state = True
@@ -54,8 +60,6 @@ def chopchop(sentence):
                 state = False
         else:
             ret2 += i + " "
-    # print(ret1+ret2)
-    # ret = int((max_len-len(ret1[:-2])+5)/2)*"_"+ret1+int((max_len-len(ret2[:-2])+5)/2)*"_"+ret2
     ret = ret1 + ret2
     punctuation = ["!", "?", ";", ":", "*"]
     for i in punctuation:
@@ -105,30 +109,41 @@ def write_text_on_image(image_path, text, output_path):
         font = ImageFont.truetype("AmericanCaptain-MdEY.otf", size=font_size)
         # font = font.font_variant(size=font_size)
         text_split = text.split("\n")
-        text_long = text_split[0] if len(text_split[0]) >= len(text_split[1]) else text_split[1]
+        text_long = text_split[0] if len(text_split)==1 else text_split[0] if len(text_split[0]) >= len(text_split[1]) else text_split[1]
         font_width, font_height = font.font.getsize(text_long)
         font_width = font_width[0]
         new_width = (width - font_width) // 2
 
         draw.text((new_width, 2000), text, fill="white", font=font, spacing=20, align="center")
-        output_path += "/quote_"+image_path.split("_")[-1]
+        output_path += "quote_"+image_path.split("_")[-1]
         image.save(output_path)
     except:
         print("Failed to write text on image.")
 
 
 def main():
-    output_path = "new_quotes"
+    f = open("all_quotes/number.txt", "r")
+    num = int(f.read())
+    path = f"all_quotes/quotes_{num}/"
+    os.mkdir(path) 
+    output_path = path
+    num_images = 3
+    
 
     completion = generate_text(prompt)
 
     candidates = [i['output'] for i in completion.candidates]
     for i in candidates:
-        random_image = get_random_image()
-        image_filename = download_image(random_image)
-        write_text_on_image(image_filename, chopchop(i), output_path)
-    # write_text_on_image(image_filename, "012345678901234567890123456789012345678901234567890123456789", output_path)
+        for _ in range(num_images):
+            random_image = get_random_image()
+            image_filename = download_image(random_image)
+            write_text_on_image(image_filename, chopchop(i), output_path)
     
+    w = open("all_quotes/number.txt", "w")  
+    w.write(str(num+1))  
+    f.close()
+    w.close()
 
+    
 if __name__ == "__main__":
     main()
