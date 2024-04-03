@@ -53,7 +53,11 @@ def chopchop(sentence):
         else:
             ret2 += i + " "
     # print(ret1+ret2)
-    return (max_len-len(ret1))*" "+ret1+(max_len-len(ret2))*" "+ret2
+    ret = (max_len-len(ret1))*" "+ret1+(max_len-len(ret2))*" "+ret2
+    punctuation = [".", "!", "?", ";", ":"]
+    for i in punctuation:
+        ret = ret.replace(i, "")
+    return ret
 
 
 def get_random_image(width=1080, height=1920):
