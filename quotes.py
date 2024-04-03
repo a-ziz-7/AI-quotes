@@ -20,7 +20,7 @@ def generate_text(prompt):
         model=model_id, 
         prompt=prompt,
         temperature=0.7,
-        candidate_count=8,
+        candidate_count=2,
     )
     if len(completion.candidates) == 0:
         return "Cannot generate text."
@@ -37,8 +37,10 @@ def chopchop(sentence):
             continue
         if state:
             answer += sentence[i]
+    if answer == "":
+        answer = sentence
     splited = answer.split(" ")
-    max_len = 32
+    max_len = 46
     ret1 = ""
     ret2 = ""
     state = True
@@ -54,13 +56,13 @@ def chopchop(sentence):
             ret2 += i + " "
     # print(ret1+ret2)
     ret = (max_len-len(ret1))*" "+ret1+(max_len-len(ret2))*" "+ret2
-    punctuation = [".", "!", "?", ";", ":"]
+    punctuation = [".", "!", "?", ";", ":", "*"]
     for i in punctuation:
         ret = ret.replace(i, "")
     return ret
 
 
-def get_random_image(width=1080, height=1920):
+def get_random_image(width=1704, height=2272):
     url = f'https://api.unsplash.com/photos/random/?client_id={keys.api_key_unsplash}&w={width}&h={height}'
     response = requests.get(url)
     
@@ -73,27 +75,31 @@ def get_random_image(width=1080, height=1920):
         return None
     
 
-def download_image(image_url, folder='images'):
+def download_image(image_url, output_path="my_images/", width=1704, height=2272):
     try:
-        filename = os.path.join(folder, f'image_{random.randint(1, 10000)}.jpg')  # Generate a random filename
-        with open(filename, 'wb') as f:
-            response = requests.get(image_url)
-            f.write(response.content)
-        return filename
-    except:
-        print("Failed to download image.")
+        response = requests.get(image_url)
+        if response.status_code == 200:
+            image_data = Image.open(BytesIO(response.content))
+            image_resized = image_data.resize((width, height), Image.LANCZOS)
+            output_path = os.path.join(output_path, f"image_{random.randint(1, 10000)}.jpg")
+            image_resized.save(output_path)
+            return output_path
+        else:
+            print(f"Failed to download image from {image_url}. Error: {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"Failed to resize image. Error: {e}")
         return None
 
 
 def write_text_on_image(image_path, text, output_path):
-    # print(image_path)
     try:
         image = Image.open(image_path)
         draw = ImageDraw.Draw(image)
-        font_size = 75
+        font_size = 85
         font = ImageFont.load_default()
         font = font.font_variant(size=font_size)
-        draw.text((30, 1350), text, fill="white", font=font)
+        draw.text((40, 2000), text, fill="white", font=font)
         output_path += "/quote_"+image_path.split("_")[-1]
         image.save(output_path)
     except:
@@ -101,7 +107,7 @@ def write_text_on_image(image_path, text, output_path):
 
 
 def main():
-    output_path = "quotes"
+    output_path = "my_quotes"
 
     completion = generate_text(prompt)
 
