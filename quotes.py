@@ -11,7 +11,7 @@ palm.configure(api_key=keys.api_key_ai)
 
 
 model_id = "models/text-bison-001"
-prompt = "Generate 1 sentence - unique motivatonal quote"
+prompt = "Generate 1 short sentence - unique motivatonal quote"
 
 
 def generate_text(prompt):
@@ -74,26 +74,30 @@ def get_random_image(width=1080, height=1920):
     
 
 def download_image(image_url, folder='images'):
-    if not os.path.exists(folder):
-        os.makedirs(folder)
-    
-    filename = os.path.join(folder, f'image_{random.randint(1, 10000)}.jpg')  # Generate a random filename
-    with open(filename, 'wb') as f:
-        response = requests.get(image_url)
-        f.write(response.content)
-    return filename
+    try:
+        filename = os.path.join(folder, f'image_{random.randint(1, 10000)}.jpg')  # Generate a random filename
+        with open(filename, 'wb') as f:
+            response = requests.get(image_url)
+            f.write(response.content)
+        return filename
+    except:
+        print("Failed to download image.")
+        return None
 
 
 def write_text_on_image(image_path, text, output_path):
     # print(image_path)
-    image = Image.open(image_path)
-    draw = ImageDraw.Draw(image)
-    font_size = 75
-    font = ImageFont.load_default()
-    font = font.font_variant(size=font_size)
-    draw.text((30, 1350), text, fill="white", font=font)
-    output_path += "/quote_"+image_path.split("_")[-1]
-    image.save(output_path)
+    try:
+        image = Image.open(image_path)
+        draw = ImageDraw.Draw(image)
+        font_size = 75
+        font = ImageFont.load_default()
+        font = font.font_variant(size=font_size)
+        draw.text((30, 1350), text, fill="white", font=font)
+        output_path += "/quote_"+image_path.split("_")[-1]
+        image.save(output_path)
+    except:
+        print("Failed to write text on image.")
 
 
 def main():
