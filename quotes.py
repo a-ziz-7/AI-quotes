@@ -55,11 +55,11 @@ def chopchop(sentence):
         else:
             ret2 += i + " "
     # print(ret1+ret2)
-    ret = (max_len-len(ret1))*" "+ret1+(max_len-len(ret2)+2)*" "+ret2
+    ret = ((max_len-len(ret1))/2)*" "+ret1+((max_len-len(ret2))/2)*" "+ret2
     punctuation = ["!", "?", ";", ":", "*"]
     for i in punctuation:
         ret = ret.replace(i, "")
-    ret = ret[:-2]
+    ret = ret.strip()[:-1]
     return ret
 
 
@@ -100,7 +100,7 @@ def write_text_on_image(image_path, text, output_path):
         font_size = 85
         font = ImageFont.load_default()
         font = font.font_variant(size=font_size)
-        draw.text((30, 2000), text, fill="white", font=font)
+        draw.text((0, 2000), text, fill="white", font=font)
         output_path += "/quote_"+image_path.split("_")[-1]
         image.save(output_path)
     except:
