@@ -120,14 +120,14 @@ def write_text_on_image(num, run, image_path, text, output_path):
 def main():
     palm.configure(api_key=keys.api_key_ai)
 
-    prompt = "Generate 1 short sentence - unique philosophical motivatonal quote"
+    prompt = "Come up with a sentence a great motivation boots quote that will inspire people to take action."
 
-    f = open("all_quotes/number.txt", "r")
+    f = open("all_quotes_0.2/number.txt", "r")
     num = int(f.read())
-    path = f"all_quotes/quotes_{num}/"
+    path = f"all_quotes_0.2/quotes_{num}/"
     os.mkdir(path) 
     output_path = path
-    num_images = 3
+    num_images = 1
     
 
     completion = generate_text(prompt)
@@ -139,7 +139,7 @@ def main():
             image_filename = download_image(random_image)
             write_text_on_image(i+1, j+1, image_filename, chopchop(candidates[i]), output_path)
     
-    w = open("all_quotes/number.txt", "w")  
+    w = open("all_quotes_0.2/number.txt", "w")  
     w.write(str(num+1))  
     f.close()
     w.close()
