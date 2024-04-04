@@ -34,7 +34,7 @@ def chopchop(sentence):
     if answer == "":
         answer = sentence
     splited = answer.split(" ")
-    max_len = 40 # might need to change
+    max_len = 42 # might need to change
     ret1 = ""
     ret2 = ""
     state = True
@@ -86,7 +86,7 @@ def download_image(image_url, output_path="my_images/", width=1704, height=2272)
         return None
 
 
-def write_text_on_image(num, run, image_path, text, output_path):
+def write_text_on_image(num, subnum, run, image_path, text, output_path):
     try:
         width = 1704
         image = Image.open(image_path)
@@ -100,7 +100,7 @@ def write_text_on_image(num, run, image_path, text, output_path):
         font_width = font_width[0]
         new_width = (width - font_width) // 2
         draw.text((new_width, 2000), text, fill="white", font=font, spacing=30, align="center")
-        output_path1 = f"{output_path}quote_{num}{run}{color}.jpg"
+        output_path1 = f"{output_path}quote_{num}{subnum}{run}.jpg"
         image.save(output_path1)
         
         # 2nd color
@@ -120,7 +120,7 @@ def write_text_on_image(num, run, image_path, text, output_path):
 def main():
     palm.configure(api_key=keys.api_key_ai)
 
-    prompt = "Come up with a sentence a great motivation boots quote that will inspire people to take action."
+    prompt = "Give me 5 different short quotes of old phylosophers."
 
     f = open("all_quotes_0.2/number.txt", "r")
     num = int(f.read())
@@ -134,10 +134,13 @@ def main():
 
     candidates = [i['output'] for i in completion.candidates]
     for i in range(len(candidates)):
-        for j in range(num_images):
-            random_image = get_random_image()
-            image_filename = download_image(random_image)
-            write_text_on_image(i+1, j+1, image_filename, chopchop(candidates[i]), output_path)
+        for k in range(len(candidates[i].split("\n"))):
+            for j in range(num_images):
+                random_image = get_random_image()
+                image_filename = download_image(random_image)
+                write_text_on_image(i+1, k+1, j+1, image_filename, chopchop(candidates[i].split("\n")[k]), output_path)
+        # print(candidates[i])
+        
     
     w = open("all_quotes_0.2/number.txt", "w")  
     w.write(str(num+1))  
