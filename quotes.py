@@ -120,7 +120,7 @@ def write_text_on_image(num, subnum, run, image_path, text, output_path):
 def main():
     palm.configure(api_key=keys.api_key_ai)
 
-    prompt = "Give me 5 different short quotes of old phylosophers."
+    prompt = "Generate 5 different short quotes by old scientists."
 
     f = open("all_quotes_0.2/number.txt", "r")
     num = int(f.read())
@@ -139,7 +139,6 @@ def main():
                 random_image = get_random_image()
                 image_filename = download_image(random_image)
                 write_text_on_image(i+1, k+1, j+1, image_filename, chopchop(candidates[i].split("\n")[k]), output_path)
-        # print(candidates[i])
         
     
     w = open("all_quotes_0.2/number.txt", "w")  
