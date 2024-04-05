@@ -18,8 +18,7 @@ def generate_text(prompt):
     )
     if len(completion.candidates) == 0:
         return "Cannot generate text."
-    else:
-        return completion
+    return completion
     
 
 def chopchop(sentence):
