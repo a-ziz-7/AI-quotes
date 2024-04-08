@@ -21,7 +21,7 @@ from PIL import Image, ImageDraw, ImageFont
 # or maybe even try gpt modest to generate images if they are significantly better than google ai
 
 # this will be a good practive to create a server that will handle all the backend stuff
-# it could envolve api requests to google ai
+# it could envolve api requests to google ai, requests to unsplash
 # and a frontend that will will handle all the I/O
 
 def generate_text(prompt):
