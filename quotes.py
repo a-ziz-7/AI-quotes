@@ -6,6 +6,10 @@ import os
 from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 
+# add an enviroment that will allow the user to input type of quote they want to generate
+# add a function that will generate a image from unsplash that will be raletad to the promt
+# add a function that will generate a quote from the palm ai that will be raletad to the promt
+
 
 def generate_text(prompt):
     model_id = "models/text-bison-001"
