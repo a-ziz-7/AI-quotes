@@ -10,6 +10,8 @@ from PIL import Image, ImageDraw, ImageFont
 # add a function that will generate a image from unsplash that will be raletad to the promt
 # add a function that will generate a quote from the palm ai that will be raletad to the promt
 
+# maybe translate this class into a server that handles all the backend stuff
+
 
 def generate_text(prompt):
     model_id = "models/text-bison-001"
