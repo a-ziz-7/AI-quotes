@@ -17,7 +17,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 # at some point I have to try to generate image myself with ai
 # it will involve exploring capabilities of google ai since it is free
-# or explore other ai that can generate images 
+# or explore other ai that can generate images preferably for free
 
 def generate_text(prompt):
     model_id = "models/text-bison-001"
