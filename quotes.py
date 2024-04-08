@@ -12,6 +12,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 # maybe translate this class into a server that handles all the backend stuff
 # will have to create a frontend that will allow the user to input the type of quote they want to generate
+# will have to create a frontend that will allow the user to download the image and the quote
 
 def generate_text(prompt):
     model_id = "models/text-bison-001"
