@@ -15,6 +15,8 @@ from PIL import Image, ImageDraw, ImageFont
 # will have to create a frontend that will allow the user to see the image and the quote
 # will have to create a frontend that will allow the user to download the image and the quote
 
+# at some point I have to try to generate image myself with ai
+
 def generate_text(prompt):
     model_id = "models/text-bison-001"
     completion = palm.generate_text(
