@@ -20,6 +20,9 @@ from PIL import Image, ImageDraw, ImageFont
 # or explore other ai that can generate images preferably for free
 # or maybe even try gpt modest to generate images if they are significantly better than google ai
 
+# this will be a good practive to create a server that will handle all the backend stuff
+# and a frontend that will will handle all the I/O
+
 def generate_text(prompt):
     model_id = "models/text-bison-001"
     completion = palm.generate_text(
