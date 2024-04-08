@@ -11,7 +11,7 @@ from PIL import Image, ImageDraw, ImageFont
 # add a function that will generate a quote from the palm ai that will be raletad to the promt
 
 # maybe translate this class into a server that handles all the backend stuff
-
+# will have to create a frontend that will allow the user to input the type of quote they want to generate
 
 def generate_text(prompt):
     model_id = "models/text-bison-001"
