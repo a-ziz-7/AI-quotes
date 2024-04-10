@@ -136,7 +136,7 @@ def write_text_on_image(num, subnum, run, image_path, text, output_path):
 def main():
     palm.configure(api_key=keys.api_key_ai)
 
-    prompt = "Generate 5 different short quotes about men dicks."
+    prompt = "Generate 5 different short romantic quotes."
 
     f = open("all_quotes_0.2/number.txt", "r")
     num = int(f.read())
