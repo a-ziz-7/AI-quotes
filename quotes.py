@@ -136,11 +136,11 @@ def write_text_on_image(num, subnum, run, image_path, text, output_path):
 def main():
     palm.configure(api_key=keys.api_key_ai)
 
-    prompt = "Generate 5 different short romantic quotes."
+    prompt = "Generate 5 different short romantic quotes related to happiness."
 
-    f = open("all_quotes_0.2/number.txt", "r")
+    f = open("all_quotes_0.3/number.txt", "r")
     num = int(f.read())
-    path = f"all_quotes_0.2/quotes_{num}/"
+    path = f"all_quotes_0.3/quotes_{num}/"
     os.mkdir(path) 
     output_path = path
     num_images = 1
@@ -157,7 +157,7 @@ def main():
                 write_text_on_image(i+1, k+1, j+1, image_filename, chopchop(candidates[i].split("\n")[k]), output_path)
         
     
-    w = open("all_quotes_0.2/number.txt", "w")  
+    w = open("all_quotes_0.3/number.txt", "w")  
     w.write(str(num+1))  
     f.close()
     w.close()
